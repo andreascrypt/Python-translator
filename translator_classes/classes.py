@@ -1,10 +1,13 @@
 import requests
 
 
+# Класс для реализации отправки реквеста для аутентификации/получения токена
 class TranslationResponse:
     def __init__(self, response):
         self.response = response
 
+    # Данный метод валидирует наш запрос на аутентификацию
+    # и возращает нам обратно класс TranslationResponse, если все прошло успешно
     def validate(self):
         if self.response.status_code == 200:
             print("Successfully authenticated! Getting token!")
@@ -12,10 +15,12 @@ class TranslationResponse:
         else:
             raise Exception("Invalid response")
 
+    # Метод, возвращающий нам токен
     def get_token(self):
         return self.response.text
 
 
+#  Класс для реализации перевода с русского на англиский
 class Translation:
     def __init__(self, key):
         self.auth_headers = {'Authorization':'Basic ' + key}
@@ -25,8 +30,7 @@ class Translation:
         self.params = {'srcLang': 1049, 'dstLang': 1033}
 
     def authentication(self):
-        response = TranslationResponse(requests.post(self.authentication_url, headers=self.auth_headers))
-        return response
+        return TranslationResponse(requests.post(self.authentication_url, headers=self.auth_headers))
 
     def translate_from_rus_to_eng(self, word):
         self.params['text'] = word
